@@ -1,4 +1,5 @@
 # CS4400-Database-Project
+## ECommerce Website
 
 MAC Django installation:
 ```
