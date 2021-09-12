@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="text-left my-4" style="background-color: #C0E6DE">
+    <strong>Your Cart</strong>
+</h2>
+<main xmlns:background-color="http://www.w3.org/1999/xhtml">
+    <ul class="container">
+        <br>
+        <ul class="list-group-item d-flex justify-content-between">
+            {% if user.is_authenticated %}
+            <table id="cart-table" class="table table-striped table-hover">
+                <thead style="background-color: #F7BD06">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Item Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total Item Price</th>
+                    <th scope="col"></th>
+                    </a>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in order_details %}
+                <tr>
+                    <th scope="row"> {{ forloop.counter }}</th>
+                    <td> {{ order.product }}</td>
+                    <td> {{ order.product.list_price }}</td>
+                    <td> {{ order.quantity}}</td>
+                    <td> ${{ order.get_total_item_price|floatformat:2 }}</td>
+                    <td>
+                        <td class="text-right">
+                        <form action="{% url 'remove_from_cart' %}" method="post">
+                            <input type="hidden" name="order_id" value={{order.id}}/>
+                            {% csrf_token %}
+                            <button type="submit" value="remove_from_cart" class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                        </form>
+                        </td>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><b>Total Order Price</b></td>
+                    {% if order_length == 0 %}
+                        <td> $0.00 </td>
+                    {% else %}
+                        <td>${{ total|floatformat:2 }}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <a href="checkout" class="btn btn-warning float-right ml-2">Checkout</a>
+                        <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-warning" role="alert">
+                Please login to add items to cart!
+            </div>
+            <div>
+                <a class="btn btn-warning float-right ml-2" href="/store/login" style="background-color: #D1E4EF">Back to Login Page</a>
+            </div>
+            {% endif %}
+        </ul>
+        </div>
+    </ul>
+</main>
+
+{% endblock content %}
